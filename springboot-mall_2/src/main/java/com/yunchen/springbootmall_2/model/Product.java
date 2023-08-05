@@ -14,6 +14,7 @@ public class Product {
     private String description;
     private Date createdDate;
     private Date lastModifiedDate;
+    //Date預設使用英國格林威治時區(GMT+0)
 
 
     public Integer getProductId() {

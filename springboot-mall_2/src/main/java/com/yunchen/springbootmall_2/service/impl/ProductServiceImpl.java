@@ -1,5 +1,6 @@
 package com.yunchen.springbootmall_2.service.impl;
 
+import com.yunchen.springbootmall_2.constant.ProductCategory;
 import com.yunchen.springbootmall_2.dao.ProductDao;
 import com.yunchen.springbootmall_2.dto.ProductRequest;
 import com.yunchen.springbootmall_2.model.Product;
@@ -17,8 +18,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductCategory category, String search) {
+        return productDao.getProducts(category, search);
     }
 
     @Override

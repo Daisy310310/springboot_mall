@@ -2,6 +2,7 @@ package com.yunchen.springbootmall_2.dao.impl;
 
 import com.yunchen.springbootmall_2.constant.ProductCategory;
 import com.yunchen.springbootmall_2.dao.ProductDao;
+import com.yunchen.springbootmall_2.dao.ProductQueryParams;
 import com.yunchen.springbootmall_2.dto.ProductRequest;
 import com.yunchen.springbootmall_2.model.Product;
 import com.yunchen.springbootmall_2.rowmapper.ProductRowMapper;
@@ -23,27 +24,28 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description," +
-                     "created_date, last_modified_date" +
-                     " FROM product WHERE 1=1";
-                        //WHERE 1=1為接category條件，就算category為null也不影響結果
+                "created_date, last_modified_date" +
+                " FROM product WHERE 1=1";
+        //WHERE 1=1為接category條件，就算category為null也不影響結果
 
         Map<String, Object> map = new HashMap<>();
 
-        if (category != null){
-           sql = sql + " AND category = :category"; //AND前的空白鍵很重要!!才不回和前面查詢語法黏在一起
-           map.put("category", category.name()); //因為category是enum類型，故須使用.name()將其轉換為字串
+        if (productQueryParams.getCategory() != null){
+            sql = sql + " AND category = :category"; //AND前的空白鍵很重要!!才不回和前面查詢語法黏在一起
+            map.put("category", productQueryParams.getCategory().name()); //因為category是enum類型，故須使用.name()將其轉換為字串
         }
 
-        if (search != null){
+        if (productQueryParams.getSearch() != null){
             sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + search +  "%");
+            map.put("search", "%" + productQueryParams.getSearch() +  "%");
         }
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
+
 
     @Override
     public Product getProductById(Integer productId) {

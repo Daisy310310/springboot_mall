@@ -1,6 +1,7 @@
 package com.yunchen.springbootmall_2.controller;
 
 import com.yunchen.springbootmall_2.constant.ProductCategory;
+import com.yunchen.springbootmall_2.dao.ProductQueryParams;
 import com.yunchen.springbootmall_2.dto.ProductRequest;
 import com.yunchen.springbootmall_2.model.Product;
 import com.yunchen.springbootmall_2.service.ProductService;
@@ -25,7 +26,11 @@ public class ProductController {
                         //required = false 讓category變可選而非必選
             @RequestParam(required = false) String search
     ){
-        List<Product> productList = productService.getProducts(category, search);
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
+
+        List<Product> productList = productService.getProducts(productQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
